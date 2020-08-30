@@ -22,4 +22,8 @@ public final class Constants {
     public static final int rightMaster = 22;
     public static final int rightSlave = 23;
 
+    public static final int shooterL = 26;
+    public static final int shooterR = 26;
+
+
 }
