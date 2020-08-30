@@ -25,6 +25,8 @@ public class Shooter extends SubsystemBase {
     shooterR.restoreFactoryDefaults();
     shooterR.setIdleMode(CANSparkMax.IdleMode.kCoast);
     shooterR.setInverted(true);
+
+    shooterL.follow(shooterR, FollowerType.PercentOutput);
   }
 
 
