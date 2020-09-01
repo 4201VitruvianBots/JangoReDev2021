@@ -33,9 +33,14 @@ public class DriveTrain extends SubsystemBase {
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
   }
 
-  public void setOutput(double output) {
-    leftMaster.set(ControlMode.PercentOutput, output);
-    rightMaster.set(ControlMode.PercentOutput, output);
+  public void setTankDrive(double leftoutput, double rightoutput) {
+    leftMaster.set(ControlMode.PercentOutput, leftoutput);
+    rightMaster.set(ControlMode.PercentOutput, rightoutput);
+  }
+
+  public void setArcadeDrive(double forwardPower, double turnPower) {
+    leftMaster.set(ControlMode.PercentOutput, forwardPower + turnPower);
+    rightMaster.set(ControlMode.PercentOutput, forwardPower - turnPower);
   }
 
   @Override

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants;
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -21,10 +21,14 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final DriveTrain m_drivetrain = new DriveTrain();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  static JoystickWrapper leftJoystick = new JoystickWrapper(Constants.leftJoystick);
+  static JoystickWrapper rightJoystick = new JoystickWrapper(Constants.rightJoystick);
+  static JoystickWrapper xBoxController = new JoystickWrapper(Constants.xBoxController);
 
 
   /**
@@ -32,9 +36,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    initializeSubsystems();
     configureButtonBindings();
   }
 
+  public void initializeSubsystems() {
+    m_drivetrain.setDefaultCommand(new SetTankDrive(m_drivetrain, () -> leftJoystick.getRawAxis(1), () -> rightJoystick.getRawAxis(1)));
+  }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -42,6 +50,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    leftJoystick.invertRawAxis(1, true);
+    rightJoystick.invertRawAxis(0, true);
   }
 
 
