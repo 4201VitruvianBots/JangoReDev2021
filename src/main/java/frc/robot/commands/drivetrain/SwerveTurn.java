@@ -14,22 +14,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class DriveForward extends CommandBase {
+public class SwerveTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double start_time, m_time;
   boolean m_direction; // True means left, right means false
-  double m_speed;
+  double m_power;
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForward(DriveTrain drivetrain, boolean direction, double time, double speed) {
+  public SwerveTurn(DriveTrain drivetrain, boolean direction, double time, double power) {
     m_drivetrain = drivetrain;
     m_time = time;
     m_direction = direction;
-    m_speed = speed;
+    m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -43,10 +44,13 @@ public class DriveForward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.setTankDrive(m_speed, m_speed);
-  
-
-   }
+    if (m_direction) {
+      m_drivetrain.setTankDrive(0, m_power);
+    } else {
+      m_drivetrain.setArcadeDrive(m_power, 0);
+    }
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

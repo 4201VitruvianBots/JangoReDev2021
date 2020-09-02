@@ -16,6 +16,10 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double gearRatioLow = 1 / 14.14;
+    public static final double gearRatioHigh = 1 / 7.49;
+    public static final double wheelDistance = 22.9; // Inches
+    public static final double wheelDiameter = 6; // Inches
 
     public static final double deadZone = 0.05;
     

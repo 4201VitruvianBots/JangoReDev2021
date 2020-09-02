@@ -14,21 +14,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class PointTurn extends CommandBase {
+public class DriveForward extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double start_time, m_time;
-  boolean m_direction; // True means left, right means false
-
+  double m_power;
   /**
    * Creates a new ExampleCommand.
-   *,
+   *
    * @param subsystem The subsystem used by this command.
    */
-  public PointTurn(DriveTrain drivetrain, boolean direction, double time) {
+  public DriveForward(DriveTrain drivetrain, double time, double power) {
     m_drivetrain = drivetrain;
     m_time = time;
-    m_direction = direction;
+    m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -42,13 +41,10 @@ public class PointTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_direction) {
-      m_drivetrain.setArcadeDrive(0, -1);
-    } else {
-      m_drivetrain.setArcadeDrive(0, 1);
-    }
-    
-  }
+    m_drivetrain.setTankDrive(m_power, m_power);
+  
+
+   }
 
   // Called once the command ends or is interrupted.
   @Override

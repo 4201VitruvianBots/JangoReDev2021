@@ -14,21 +14,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class SwerveTurn extends CommandBase {
+public class PointTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double start_time, m_time;
   boolean m_direction; // True means left, right means false
+  double m_power;
 
   /**
    * Creates a new ExampleCommand.
-   *
+   *,
    * @param subsystem The subsystem used by this command.
    */
-  public SwerveTurn(DriveTrain drivetrain, boolean direction, double time) {
+  public PointTurn(DriveTrain drivetrain, boolean direction, double time, double power) {
     m_drivetrain = drivetrain;
     m_time = time;
     m_direction = direction;
+    m_power = power
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -43,9 +45,9 @@ public class SwerveTurn extends CommandBase {
   @Override
   public void execute() {
     if (m_direction) {
-      m_drivetrain.setArcadeDrive(0.5, -0.5);
+      m_drivetrain.setArcadeDrive(0, -power);
     } else {
-      m_drivetrain.setArcadeDrive(0.5, 0.5);
+      m_drivetrain.setArcadeDrive(0, power);
     }
     
   }
