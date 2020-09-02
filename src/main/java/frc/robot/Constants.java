@@ -17,7 +17,8 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final int deadZone = 0.05;
+    public static final double deadZone = 0.05;
+    
     public static final int leftJoystick = 0;
     public static final int rightJoystick = 1;
     public static final int xBoxController = 2;

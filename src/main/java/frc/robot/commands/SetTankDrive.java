@@ -7,10 +7,10 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import java.util.DoubleSupplier;
-import Math;
+import java.util.function.DoubleSupplier;
+import java.lang.Math;
 import frc.robot.Constants;
 /**
  * An example command that uses an example subsystem.
@@ -44,13 +44,13 @@ public class SetTankDrive extends CommandBase {
   public void execute() {
     double leftOutput = 0;
     double rightOutput = 0;
-    if (Math.abs(leftJoystick.getAsDouble()) >= Constants.deadZone) {
-      leftOutput = leftJoystick.getAsDouble();
+    if (Math.abs(m_leftJoystick.getAsDouble()) >= Constants.deadZone) {
+      leftOutput = m_leftJoystick.getAsDouble();
     }
-    if (Math.abs(rightJoystick.getAsDouble()) >= Constants.deadZone) {
-      rightOutput = rightJoystick.getAsDouble();
+    if (Math.abs(m_rightJoystick.getAsDouble()) >= Constants.deadZone) {
+      rightOutput = m_rightJoystick.getAsDouble();
     }
-    m_drivetrain.SetTankDrive(leftOutput, rightOutput);
+    m_drivetrain.setTankDrive(leftOutput, rightOutput);
   }
 
   // Called once the command ends or is interrupted.

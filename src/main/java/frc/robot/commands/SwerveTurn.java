@@ -8,7 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class SwerveTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private int start_time, m_time;
+  private double start_time, m_time;
   boolean m_direction; // True means left, right means false
 
   /**
@@ -36,16 +36,16 @@ public class SwerveTurn extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    start_time = Timer.getTimeStamp();
+    start_time = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_direction) {
-      m_drivetrain.setArcadeDrive(0.5, -0.5)
+      m_drivetrain.setArcadeDrive(0.5, -0.5);
     } else {
-      m_drivetrain.setArcadeDrive(0.5, 0.5)
+      m_drivetrain.setArcadeDrive(0.5, 0.5);
     }
     
   }
@@ -59,6 +59,6 @@ public class SwerveTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getTimeStamp() >= start_time + m_time;
+    return Timer.getFPGATimestamp() >= start_time + m_time;
   }
 }
