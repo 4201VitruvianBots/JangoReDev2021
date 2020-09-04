@@ -22,6 +22,7 @@ public class DriveTrain extends SubsystemBase {
   private TalonSRX leftSlave = new TalonSRX(Constants.leftSlave);
   private TalonSRX rightMaster = new TalonSRX(Constants.rightMaster);
   private TalonSRX rightSlave = new TalonSRX(Constants.rightSlave);
+  private DoubleSolenoid shifters = new DoubleSolenoid(m_drivetrain, Constants.driveShiftersForward, Constants.driveShiftersReverse);
 
   public DriveTrain() {
     leftMaster.setInverted(false);
@@ -41,6 +42,18 @@ public class DriveTrain extends SubsystemBase {
   public void setArcadeDrive(double forwardPower, double turnPower) {
     leftMaster.set(ControlMode.PercentOutput, forwardPower + turnPower);
     rightMaster.set(ControlMode.PercentOutput, forwardPower - turnPower);
+  }
+
+  public void setDriveShifters(boolean state) {
+    if (state) {
+      shifters.setDriveShifters(DoubleSolenoid.Value.driveShiftersForward);
+    } else {
+      shifters.setDriveShifters(DoubleSolenoid.Vlaue.driveShiftersReverse);
+    }
+  }
+
+  public boolean getShifterState() {
+    return shifters.getShifterState();
   }
 
   @Override

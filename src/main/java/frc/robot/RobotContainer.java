@@ -28,9 +28,10 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  static JoystickWrapper leftJoystick = new JoystickWrapper(Constants.leftJoystick);
-  static JoystickWrapper rightJoystick = new JoystickWrapper(Constants.rightJoystick);
-  static JoystickWrapper xBoxController = new JoystickWrapper(Constants.xBoxController);
+
+  private static JoystickWrapper leftJoystick = new JoystickWrapper(Constants.leftJoystick);
+  private static JoystickWrapper rightJoystick = new JoystickWrapper(Constants.rightJoystick);
+  private static JoystickWrapper xBoxController = new JoystickWrapper(Constants.xBoxController);
 
 
   /**
@@ -43,7 +44,7 @@ public class RobotContainer {
   }
 
   public void initializeSubsystems() {
-    m_drivetrain.setDefaultCommand(new SetTankDrive(m_drivetrain, () -> leftJoystick.getRawAxis(1), () -> rightJoystick.getRawAxis(1)));
+    m_drivetrain.setDefaultCommand(new (SetTankDrive(m_drivetrain, () -> leftJoystick.getY, () -> rightJoystick.getY));
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -56,6 +57,21 @@ public class RobotContainer {
     rightJoystick.invertRawAxis(0, true);
   }
 
+  public double getLeftJoystickX() {
+    return leftJoystick.getX();
+  }
+
+  public double getLeftJoystickY() {
+    return leftJoystick.getY();
+  }
+
+  public double getRightJoystickX() {
+    return rightJoystick.getX();
+  }
+
+  public double getRightJoystickY() {
+    return rightJoystick.getY();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
