@@ -5,10 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 /**
@@ -34,7 +33,7 @@ public class DriveBackward extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
-    startTime = Timer.getFPAGTimestamp();
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,6 +51,6 @@ public class DriveBackward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPAGTimestamp() >= startTime+m_time;
+    return Timer.getFPGATimestamp() >= startTime+m_time;
   }
 }

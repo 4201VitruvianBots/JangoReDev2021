@@ -20,6 +20,7 @@ public final class Constants {
     public static final double gearRatioHigh = 1 / 7.49;
     public static final double wheelDistance = 22.9; // Inches
     public static final double wheelDiameter = 6; // Inches
+    public static final int falconRPM = 6380;
 
     public static final double deadZone = 0.05;
     
@@ -27,6 +28,7 @@ public final class Constants {
     public static final int rightJoystick = 1;
     public static final int xBoxController = 2;
 
+    public static int pcmOne = 11;
     public static final int driveTrainShiftersForward = 0;
     public static final int driveTrainShiftersReverse = 1;
     

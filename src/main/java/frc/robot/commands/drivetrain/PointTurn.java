@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DriveTrain;
@@ -17,9 +17,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class PointTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private double start_time, m_time;
+  private double start_time, m_time, m_power;
   boolean m_direction; // True means left, right means false
-  double m_power;
 
   /**
    * Creates a new ExampleCommand.
@@ -30,7 +29,7 @@ public class PointTurn extends CommandBase {
     m_drivetrain = drivetrain;
     m_time = time;
     m_direction = direction;
-    m_power = power
+    m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -45,9 +44,9 @@ public class PointTurn extends CommandBase {
   @Override
   public void execute() {
     if (m_direction) {
-      m_drivetrain.setArcadeDrive(0, -power);
+      m_drivetrain.setArcadeDrive(0, -m_power);
     } else {
-      m_drivetrain.setArcadeDrive(0, power);
+      m_drivetrain.setArcadeDrive(0, m_power);
     }
     
   }
