@@ -14,17 +14,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /**
  * An example command that uses an example subsystem.
  */
-public class Drive extends CommandBase {
+public class Shoot extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveTrain m_subsystem;
+  private final Shooter m_subsystem;
+  private double m_output;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Drive(DriveTrain subsystem) {
+  public Shoot(Shooter subsystem, double shootOutput) {
     m_subsystem = subsystem;
+    m_output = shootOutput;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -37,13 +39,13 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setOutput(-1);
+    m_subsystem.revup(m_output);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setOutput(0);
+    m_subsystem.revup(0);
   }
 
   // Returns true when the command should end.
