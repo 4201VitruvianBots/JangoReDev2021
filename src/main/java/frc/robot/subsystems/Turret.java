@@ -18,6 +18,7 @@ public class Turret extends SubsystemBase {
   /**
    * Creates a new Turret.
    */
+  public void spin(double output) {
    private CANSparkMax turretMotor =  new CANSparkMax(Constants.turretMotor, MotorType.kBrushless);
    
    public Turret() {
