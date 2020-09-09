@@ -41,7 +41,7 @@ public class RobotContainer {
   }
 
   public void initializeSubsystems() {
-    m_drivetrain.setDefaultCommand(new SetTankDrive(m_drivetrain, () -> leftJoystick.getY(), () -> rightJoystick.getY()));
+    m_drivetrain.setDefaultCommand(new SetTankDrive(m_drivetrain));
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by

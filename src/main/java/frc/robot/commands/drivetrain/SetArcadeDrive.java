@@ -8,6 +8,7 @@
 package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 import java.lang.Math;
@@ -18,17 +19,13 @@ import frc.robot.Constants;
 public class SetArcadeDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private final DoubleSupplier m_leftJoystick;
-  private final DoubleSupplier m_rightJoystick;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetArcadeDrive(DriveTrain drivetrain, DoubleSupplier leftJoystick, DoubleSupplier rightJoystick) {
-    m_leftJoystick = leftJoystick;
-    m_rightJoystick = rightJoystick;
+  public SetArcadeDrive(DriveTrain drivetrain) {
     m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -42,14 +39,13 @@ public class SetArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftOutput = 0;
-    double rightOutput = 0;
-    if (Math.abs(m_leftJoystick.getAsDouble()) >= Constants.deadZone) {
-      leftOutput = m_leftJoystick.getAsDouble();
+    double leftOutput = RobotContainer.getLeftJoystickY();
+    double rightOutput = RobotContainer.getRightJoystickY();
+    if (Math.abs(leftOutput) < Constants.deadZone) {
+      leftOutput 0;
     }
-    if (Math.abs(m_rightJoystick.getAsDouble()) >= Constants.deadZone) {
-      rightOutput = m_rightJoystick.getAsDouble();
-    }
+    if (Math.abs(rightOutput) < Constants.deadZone) {
+      rightOutput = 0;
     m_drivetrain.setArcadeDrive(leftOutput, rightOutput);
   }
 

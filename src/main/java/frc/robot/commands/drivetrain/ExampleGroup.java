@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 /**
  * An example command that uses an example subsystem.
  */
-public class ExampleGroup extends ParallelCommandGroup {
+public class ExampleGroup extends SequentialCommandGroup// ParallelCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   /**
    * Creates a new ExampleCommand.

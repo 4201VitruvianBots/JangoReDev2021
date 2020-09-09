@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import java.lang.Math;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -55,6 +56,16 @@ public class DriveTrain extends SubsystemBase {
 
   public boolean getShifterState() {
     return shifters.get() == DoubleSolenoid.Value.kForward;
+  }
+
+  public double powerToSpeed(double power) {
+    double gearRatio;
+    if (getShifterState()) {
+      gearRatio = Constants.gearRatioHigh;
+    } else {
+      gearRatio = Constants.gearRatioLow;
+    }
+    return Constants.falconRPM * power / 60 * gearRatio * 2 * Units.InchestoFeet(Constants.wheelDiameter) * Math.PI;
   }
 
   @Override
