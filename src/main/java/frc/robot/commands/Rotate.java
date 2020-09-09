@@ -16,14 +16,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class Rotate extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Turret m_subsystem;
-
+  private double m_output;
+  
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Rotate(Turret subsystem) {
+  public Rotate(Turret subsystem, double goAround) {
     m_subsystem = subsystem;
+    m_output = goAround;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -36,11 +38,13 @@ public class Rotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_subsystem.Zetoutput(m_output);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_subsystem.Zetoutput(0);
   }
 
   // Returns true when the command should end.
