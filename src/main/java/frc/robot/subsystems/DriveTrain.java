@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.lang.Math;
@@ -65,7 +66,7 @@ public class DriveTrain extends SubsystemBase {
     } else {
       gearRatio = Constants.gearRatioLow;
     }
-    return Constants.falconRPM * power / 60 * gearRatio * 2 * Units.InchestoFeet(Constants.wheelDiameter) * Math.PI;
+    return Constants.falconRPM * power / 60 * gearRatio * 2 * Constants.wheelDiameter * Math.PI;
   }
 
   @Override

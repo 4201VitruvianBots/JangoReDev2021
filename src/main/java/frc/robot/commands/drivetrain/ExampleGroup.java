@@ -13,11 +13,12 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class ExampleGroup extends SequentialCommandGroup// ParallelCommandGroup {
+public class ExampleGroup extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   /**
    * Creates a new ExampleCommand.
@@ -25,7 +26,7 @@ public class ExampleGroup extends SequentialCommandGroup// ParallelCommandGroup 
    * @param subsystem The subsystem used by this command.
    */
   public ExampleGroup(DriveTrain drivetrain, ExampleSubsystem exampleSubsystem, RobotContainer container) {
-    addCommands(new SetTankDrive(drivetrain, () -> container.getLeftJoystickY(), () -> container.getRightJoystickY()), new ExampleCommand(exampleSubsystem));
+    addCommands(new SetTankDrive(drivetrain, container), new ExampleCommand(exampleSubsystem));
   }
 
 }

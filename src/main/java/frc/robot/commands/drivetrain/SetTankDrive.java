@@ -19,6 +19,7 @@ import frc.robot.Constants;
 public class SetTankDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
+  private final RobotContainer m_container;
 
 
   /**
@@ -26,8 +27,9 @@ public class SetTankDrive extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetTankDrive(DriveTrain drivetrain) {
+  public SetTankDrive(DriveTrain drivetrain, RobotContainer container) {
     m_drivetrain = drivetrain;
+    m_container = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -40,10 +42,10 @@ public class SetTankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftOutput = RobotContainer.getLeftJoystickY();
-    double rightOutput = RobotContainer.getRightJoystickY();
+    double leftOutput = m_container.getLeftJoystickY();
+    double rightOutput = m_container.getRightJoystickY();
     if (Math.abs(leftOutput) < Constants.deadZone) {
-      leftOutput 0;
+      leftOutput = 0;
     }
     if (Math.abs(rightOutput) < Constants.deadZone) {
       rightOutput = 0;
