@@ -7,9 +7,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -28,10 +31,10 @@ public class Shooter extends SubsystemBase {
     shooterR.setIdleMode(CANSparkMax.IdleMode.kCoast);
     shooterR.setInverted(true);
 
-    shooterL.follow(shooterR, FollowerType.PercentOutput);
+    shooterL.follow(shooterR);
   }
   public void revup(double output) {
-    shooterR.set(ControlMode.PercentOutput,output);
+    shooterR.set(output);
   }
 
   @Override
