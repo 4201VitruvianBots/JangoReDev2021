@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DriveTrain;
@@ -47,7 +47,7 @@ public class SwerveTurn extends CommandBase {
     if (m_direction) {
       m_drivetrain.setTankDrive(0, m_power);
     } else {
-      m_drivetrain.setArcadeDrive(m_power, 0);
+      m_drivetrain.setTankDrive(m_power, 0);
     }
     
   }

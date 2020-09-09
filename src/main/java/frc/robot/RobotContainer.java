@@ -24,14 +24,11 @@ import frc.robot.Constants;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_drivetrain = new DriveTrain();
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
-  private static JoystickWrapper leftJoystick = new JoystickWrapper(Constants.leftJoystick);
-  private static JoystickWrapper rightJoystick = new JoystickWrapper(Constants.rightJoystick);
-  private static JoystickWrapper xBoxController = new JoystickWrapper(Constants.xBoxController);
+  private static Joystick leftJoystick = new Joystick(Constants.leftJoystick);
+  private static Joystick rightJoystick = new Joystick(Constants.rightJoystick);
+  private static Joystick xBoxController = new Joystick(Constants.xBoxController);
 
 
   /**
@@ -44,7 +41,7 @@ public class RobotContainer {
   }
 
   public void initializeSubsystems() {
-    m_drivetrain.setDefaultCommand(new (SetTankDrive(m_drivetrain, () -> leftJoystick.getY, () -> rightJoystick.getY));
+    m_drivetrain.setDefaultCommand(new SetTankDrive(m_drivetrain, () -> leftJoystick.getY(), () -> rightJoystick.getY()));
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by

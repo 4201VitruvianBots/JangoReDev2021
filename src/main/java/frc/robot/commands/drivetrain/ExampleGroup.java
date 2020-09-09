@@ -5,11 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
  * An example command that uses an example subsystem.
@@ -21,8 +24,8 @@ public class ExampleGroup extends ParallelCommandGroup {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleGroup(DriveTrain drivetrain, ExampleSubsystem exampleSubsystem) {
-    addCommands(new SetTankDrive(drivetrain, () -> RobotContainer.getLeftJoystickY(), () -> RobotContainer.getRightJoystickY()), new ExampleCommand(exampleSubsystem));
+  public ExampleGroup(DriveTrain drivetrain, ExampleSubsystem exampleSubsystem, RobotContainer container) {
+    addCommands(new SetTankDrive(drivetrain, () -> container.getLeftJoystickY(), () -> container.getRightJoystickY()), new ExampleCommand(exampleSubsystem));
   }
 
 }

@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,7 +23,7 @@ public class DriveTrain extends SubsystemBase {
   private TalonSRX leftSlave = new TalonSRX(Constants.leftSlave);
   private TalonSRX rightMaster = new TalonSRX(Constants.rightMaster);
   private TalonSRX rightSlave = new TalonSRX(Constants.rightSlave);
-  private DoubleSolenoid shifters = new DoubleSolenoid(m_drivetrain, Constants.driveShiftersForward, Constants.driveShiftersReverse);
+  private DoubleSolenoid shifters = new DoubleSolenoid(Constants.pcmOne, Constants.driveTrainShiftersForward, Constants.driveTrainShiftersReverse);
 
   public DriveTrain() {
     leftMaster.setInverted(false);
@@ -46,14 +47,14 @@ public class DriveTrain extends SubsystemBase {
 
   public void setDriveShifters(boolean state) {
     if (state) {
-      shifters.setDriveShifters(DoubleSolenoid.Value.driveShiftersForward);
+      shifters.set(DoubleSolenoid.Value.kForward);
     } else {
-      shifters.setDriveShifters(DoubleSolenoid.Vlaue.driveShiftersReverse);
+      shifters.set(DoubleSolenoid.Value.kReverse);
     }
   }
 
   public boolean getShifterState() {
-    return shifters.getShifterState();
+    return shifters.get() == DoubleSolenoid.Value.kForward;
   }
 
   @Override
