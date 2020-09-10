@@ -22,4 +22,12 @@ public final class Constants {
     public static final int rightMaster = 22;
     public static final int rightSlave = 23;
 
+    public static final int pcm = 11;
+
+    public static final int driveTrainShiftersForward = 0;
+    public static final int driveTrainShiftersReverse = 1;
+
+    public static final int leftJoystick = 0;
+    public static final int rightJoystick = 1;
+
 }
