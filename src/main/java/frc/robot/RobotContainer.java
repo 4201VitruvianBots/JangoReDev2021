@@ -51,11 +51,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     buttonZero.whenPressed(new DriveStraightSeconds(m_driveTrain, 2, 0.25));
-    buttonZero.whileHeld(new Drive(m_driveTrain, () -> leftJoystick.getY()));
+    buttonZero.whileHeld(new Drive(m_driveTrain));
   }
 
   public void initalizeSubsystems() {
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, () -> leftJoystick.getY()));
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
   }
 
   public double getLeftJoystickX() {
