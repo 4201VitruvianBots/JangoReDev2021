@@ -29,7 +29,7 @@ public class SwerveTurnAngle extends CommandBase {
     m_drivetrain = drivetrain;
     m_angle = angle;
     m_power = power;
-    m_distance = m_angle / 360 * Math.PI * Constants.wheelDiameter;
+    m_distance = m_angle / 360 * 2* Math.PI * Constants.wheelDistance;
     m_time = m_distance / m_drivetrain.powerToSpeed(m_power);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
