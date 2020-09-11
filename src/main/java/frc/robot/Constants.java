@@ -27,6 +27,8 @@ public final class Constants {
     public static final int leftJoystick = 0;
     public static final int rightJoystick = 1;
     public static final int xBoxController = 2;
+    public static final int shiftForwardButton = 0;
+    public static final int shiftReverseButton = 1;
 
     public static int pcmOne = 11;
     public static final int driveTrainShiftersForward = 0;

@@ -8,12 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.commands.drivetrain.SetTankDrive;
-import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.drivetrain.*;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,6 +28,8 @@ public class RobotContainer {
 
   private static Joystick leftJoystick = new Joystick(Constants.leftJoystick);
   private static Joystick rightJoystick = new Joystick(Constants.rightJoystick);
+  private static JoystickButton shiftForwardButton = new JoystickButton(leftJoystick, Constants.shiftForwardButton);
+  private static JoystickButton shiftReverseButton = new JoystickButton(rightJoystick, Constants.shiftReverseButton);
   private static Joystick xBoxController = new Joystick(Constants.xBoxController);
 
 
@@ -52,6 +54,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     leftJoystick.invertRawAxis(1, true);
     rightJoystick.invertRawAxis(0, true);
+    shiftForwardButton.whenPressed(new SetShiftersForward(m_drivetrain));
+    shiftReverseButton.whenPressed(new SetShiftersReverse(m_drivetrain));
   }
 
   public double getLeftJoystickX() {
