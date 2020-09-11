@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * An example command that uses an example subsystem.
  */
-public class DriveBackward extends CommandBase {
+public class SetShiftersForward extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double m_time, m_power,startTime;
@@ -22,10 +22,8 @@ public class DriveBackward extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveBackward(DriveTrain drivetrain,double time,double power) {
+  public SetShiftersForward(DriveTrain drivetrain) {
     m_drivetrain = drivetrain;
-      m_time = time;
-      m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
