@@ -7,28 +7,23 @@
 
 package frc.robot.subsystems;
 
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
-public class Turret extends SubsystemBase {
+public class Kicker extends SubsystemBase {
   /**
-   * Creates a new Turret.
+   * Creates a new ExampleSubsystem.
    */
-  public void spin(double output) {
-    private CANSparkMax turretMotor =  new CANSparkMax(Constants.turretMotor, MotorType.kBrushless);
-   
-    public Turret() {
-    turretMotor.restoreFactoryDefaults();
-    turretMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    turretMotor.setInverted(false);
+  public ExampleSubsystem() {
+    private CANSparkMax kickerMotor =  new CANSparkMax(Constants.kickerMotor, MotorType.kBrushless);
+
+    public Kicker() {
+    kickerMotor.restoreFactoryDefaults();
+    kickerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    kickerMotor.setInverted(false);
    }
-public void Zetoutput(double output) {
-  turretMotor.set(output);
-   }
+public void kickit(double output) {
+  kickerMotor.set(output);
+  }
 
   @Override
   public void periodic() {
