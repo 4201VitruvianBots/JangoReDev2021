@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -15,10 +15,7 @@ import frc.robot.constants.Enums.IntakeStates;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class ControlledIntake extends CommandBase {
+public class ControlledtimedIntake extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Indexer m_indexer;
   private final Intake m_intake;
@@ -30,15 +27,14 @@ public class ControlledIntake extends CommandBase {
   private Joystick m_controller;
 
   private IntakeStates intakeState = IntakeStates.INTAKE_EMPTY;
-  /*
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+  /**
+   * Creates a new ControlledtimedIntake.
    */
-  public ControlledIntake(Intake intake, Indexer indexer, Joystick controller) {
+  public ControlledtimedIntake(Intake intake, Indexer indexer, Joystick controller) {
     m_intake = intake;
     m_indexer = indexer;
     m_controller = controller;
+    m_time = 10;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     addRequirements(indexer);
@@ -49,19 +45,22 @@ public class ControlledIntake extends CommandBase {
   public void initialize() {
     m_intake.setIntakingState(true);
     timestamp = Timer.getFPGATimestamp();
-
     if(m_indexer.getIntakeSensor() && m_indexer.getIndexerBottomSensor() && m_indexer.getIndexerTopSensor())
       intakeState = IntakeStates.INTAKE_FIVE_BALLS;
     else if(m_indexer.getIndexerBottomSensor() && m_indexer.getIndexerTopSensor())
       intakeState = IntakeStates.INTAKE_FOUR_BALLS;
     else
       intakeState = IntakeStates.INTAKE_ONE_BALL;
+
+
+      startTime = Timer.getFPGATimestamp();
+          if(m_intake.getIntakePistonExtendStatus() != true)
+              m_intake.setintakePiston(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     switch (intakeState) {
       case INTAKE_FIVE_BALLS:
         m_intake.setIntakePercentOutput(0);
@@ -84,46 +83,8 @@ public class ControlledIntake extends CommandBase {
           m_indexer.setIndexerOutput(0.95);
         } else {
           m_indexer.setIndexerOutput(0);
-        }
 
-//        if(m_indexer.getIndexerTopSensor() && m_indexer.getIndexerBottomSensor() && !haveFourTripped) {
-//          fourBallTimestamp = Timer.getFPGATimestamp();
-//          haveFourTripped = true;
-//        } else if(!m_indexer.getIndexerBottomSensor() || !m_indexer.getIndexerTopSensor()){
-//          fourBallTimestamp = 0;
-//          haveFourTripped = false;
-//          haveFour = false;
-//        }
-
-        if(m_indexer.getIndexerTopSensor() && m_indexer.getIndexerBottomSensor() ) { 
-          m_indexer.setRPM(0);
-          intakeState = IntakeStates.INTAKE_FOUR_BALLS;
-        }
-        break;
-    }
-
-    //updateTimedRollers();
   }
-
-  private void updateTimedRollers() {
-    timestamp = Timer.getFPGATimestamp();
-
-    if(fourBallTimestamp != 0)
-      if((timestamp - fourBallTimestamp) > 0.5)
-        haveFour = true;
-      else
-        haveFour = false;
-
-    if(intakeState != IntakeStates.INTAKE_EMPTY)
-      if(indexerTimestamp != 0)
-        if(timestamp - indexerTimestamp < 0.1)
-          m_indexer.setRPM(indexRPM);
-        else {
-          m_indexer.setRPM(0);
-          intaking = false;
-        }
-  }
-
 
   // Called once the command ends or is interrupted.
   @Override
@@ -141,6 +102,7 @@ public class ControlledIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Timer.getFPGATimestamp()-startTime>m_time;
+    return intakeState==INTAKE_FIVE_BALLS
   }
 }

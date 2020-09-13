@@ -7,58 +7,34 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
 
-public class TimedIntake extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Intake m_intake;
-  private final Indexer m_indexer;
-  private double startTime, m_time; 
+public class SetIndexer extends CommandBase {
   /**
-   * Creates a new TimedIntake.
+   * Creates a new SetIndexer.
    */
-  public TimedIntake() {
-    m_intake = intake;
-    m_indexer = indexer;
-    m_time = time;
+  public SetIndexer() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-    addRequirements(indexer);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-        if(m_intake.getIntakePistonExtendStatus() != true)
-            m_intake.setintakePiston(true);
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_indexer.setIndexerOutput(1);
-    m_indexer.setKickerOutput(-0.25);
-    m_intake.setIntakePercentOutput(0.9);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_indexer.setIndexerOutput(0);
-    m_indexer.setKickerOutput(0);
-    m_intake.setIntakePercentOutput(0);
-    if(m_intake.getIntakePistonExtendStatus() != false)
-        m_intake.setintakePiston(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp()-startTime>m_time;
+    return false;
   }
 }
