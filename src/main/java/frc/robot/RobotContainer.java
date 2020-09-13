@@ -8,10 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,9 +24,17 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Turret m_Turret = new Turret();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final Shooter m_Shooter = new Shooter();
+
+  private final Kicker m_Kicker = new Kicker();
+
+  private final Joystick leftJoystick = new Joystick(Constants.leftjoystick);
+
+  private final Joystick rightJoystick = new Joystick(Constants.rightjoystick);
+
+  private final JoystickButton oneButton = new JoystickButton(leftJoystick, 1);
 
 
 
@@ -42,9 +53,20 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    oneButton.whileHeld(new Kick(m_Kicker));
   }
+  private double leftJoystickX() {
+    return leftJoystick.getX();
+  }
+  private double rightJoystickY() {
+    return rightJoystick.getY();
+  }
+  private Shoot shoot = new Shoot(m_Shooter, rightJoystickY());
 
-
+  private Rotate rotate = new Rotate(m_Turret, leftJoystickX());
+  
+  m_Shooter.setDefaultCommand(shoot);
+  m_Turret.setDefaultCommand(rotate);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

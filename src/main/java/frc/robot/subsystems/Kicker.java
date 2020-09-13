@@ -13,10 +13,9 @@ public class Kicker extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  public ExampleSubsystem() {
-    private CANSparkMax kickerMotor =  new CANSparkMax(Constants.kickerMotor, MotorType.kBrushless);
+  private CANSparkMax kickerMotor =  new CANSparkMax(Constants.kickerMotor, MotorType.kBrushless);
 
-    public Kicker() {
+  public Kicker() {
     kickerMotor.restoreFactoryDefaults();
     kickerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     kickerMotor.setInverted(false);
@@ -26,7 +25,7 @@ public void kickit(double output) {
   }
 
   @Override
-  public void periodic() {
+public void periodic() {
     // This method will be called once per scheduler run
   }
-}
+

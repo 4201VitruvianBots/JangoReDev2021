@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class Kick extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+  private final Kicker m_subsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -36,7 +36,7 @@ public class Kick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.kickit(m_output);
+    m_subsystem.kickit(1);
   }
 
   // Called once the command ends or is interrupted.
