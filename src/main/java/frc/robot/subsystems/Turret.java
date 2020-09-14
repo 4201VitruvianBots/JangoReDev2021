@@ -18,20 +18,20 @@ public class Turret extends SubsystemBase {
   /**
    * Creates a new Turret.
    */
-  public void spin(double output) {
-    private CANSparkMax turretMotor =  new CANSparkMax(Constants.turretMotor, MotorType.kBrushless);
+  private CANSparkMax turretMotor =  new CANSparkMax(Constants.turretMotor, MotorType.kBrushless);
    
-    public Turret() {
+  public Turret() {
     turretMotor.restoreFactoryDefaults();
     turretMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     turretMotor.setInverted(false);
-   }
-public void Zetoutput(double output) {
+  }
+  public void Zetoutput(double output) {
   turretMotor.set(output);
-   }
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 }
+
