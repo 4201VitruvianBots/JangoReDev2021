@@ -21,38 +21,39 @@ public class DriveTrain extends SubsystemBase {
    * Creates a new ExampleSubsystem.
    */
 
+  // Creating motor controllers
   private TalonSRX leftMaster = new TalonSRX(Constants.leftMaster);
   private TalonSRX leftSlave = new TalonSRX(Constants.leftSlave);
   private TalonSRX rightMaster = new TalonSRX(Constants.rightMaster);
   private TalonSRX rightSlave = new TalonSRX(Constants.rightSlave);
+
+  // Drive shifters
   private DoubleSolenoid shifters = new DoubleSolenoid(Constants.pcmOne, Constants.driveTrainShiftersForward, Constants.driveTrainShiftersReverse);
 
   public DriveTrain() {
+    // Make sure motors and not inverted
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
     rightMaster.setInverted(false);
     rightSlave.setInverted(false);
 
+    // Make sure slave motors are receving same power as master motors
     leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
   }
 
-  public void setTankDrive(double leftoutput, double rightoutput) {
+  public void setTankDrive(double leftoutput, double rightoutput) { // Sets left motors to value of left joystick and right motors to value of right joystick
     leftMaster.set(ControlMode.PercentOutput, leftoutput);
     rightMaster.set(ControlMode.PercentOutput, rightoutput);
   }
 
-  public void setArcadeDrive(double forwardPower, double turnPower) {
+  public void setArcadeDrive(double forwardPower, double turnPower) { // Move motors forward at a certain power, but changes that power to make robot turn
     leftMaster.set(ControlMode.PercentOutput, forwardPower + turnPower);
     rightMaster.set(ControlMode.PercentOutput, forwardPower - turnPower);
   }
 
   public void setDriveShifters(boolean state) {
-    if (state) {
-      shifters.set(DoubleSolenoid.Value.kForward);
-    } else {
-      shifters.set(DoubleSolenoid.Value.kReverse);
-    }
+    shifters.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
   }
 
   public boolean getShifterState() {
@@ -60,12 +61,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double powerToSpeed(double power) {
-    double gearRatio;
-    if (getShifterState()) {
-      gearRatio = Constants.gearRatioHigh;
-    } else {
-      gearRatio = Constants.gearRatioLow;
-    }
+    double gearRatio = getShifterState() ? Constants.gearRatioHigh : Constants.gearRatioLow;
     return Constants.falconRPM * power / 60 * gearRatio * 2 * Constants.wheelDiameter * Math.PI;
   }
 

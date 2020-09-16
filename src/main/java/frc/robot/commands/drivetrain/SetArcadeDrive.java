@@ -42,6 +42,7 @@ public class SetArcadeDrive extends CommandBase {
   public void execute() {
     double leftOutput = m_container.getLeftJoystickY();
     double rightOutput = m_container.getRightJoystickY();
+    // Sets the motors to joystick input as long as joysticks aren't inside deadzone
     if (Math.abs(leftOutput) < Constants.deadZone) {
       leftOutput = 0;
     }

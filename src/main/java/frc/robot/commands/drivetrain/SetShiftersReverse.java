@@ -29,8 +29,8 @@ public class SetShiftersReverse extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_drivetrain.getShifterState()) {
-    m_drivetrain.setDriveShifters(false);
+    if (m_drivetrain.getShifterState()) {  
+    m_drivetrain.setDriveShifters(false); // Sets shifters to reverse if they're currently forward
     }
   }
 

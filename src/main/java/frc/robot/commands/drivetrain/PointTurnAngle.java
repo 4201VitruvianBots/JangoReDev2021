@@ -44,12 +44,7 @@ public class PointTurnAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_angle > 0) {
-      m_drivetrain.setTankDrive(m_power, -m_power);
-    } else {
-      m_drivetrain.setArcadeDrive(-m_power, m_power);
-    }
-    
+    m_drivetrain.setArcadeDrive(0, m_power * (m_angle > 0 ? 1 : -1));
   }
 
   // Called once the command ends or is interrupted.

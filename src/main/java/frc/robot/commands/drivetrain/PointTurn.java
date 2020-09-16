@@ -18,7 +18,7 @@ public class PointTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double start_time, m_time, m_power;
-  boolean m_direction; // True means left, right means false
+  boolean m_direction; // True means left, false means right
 
   /**
    * Creates a new ExampleCommand.
@@ -44,9 +44,9 @@ public class PointTurn extends CommandBase {
   @Override
   public void execute() {
     if (m_direction) {
-      m_drivetrain.setArcadeDrive(0, -m_power);
+      m_drivetrain.setArcadeDrive(0, -m_power); // Set right motors to forward and left motors to backward
     } else {
-      m_drivetrain.setArcadeDrive(0, m_power);
+      m_drivetrain.setArcadeDrive(0, m_power); // Sets left motors to forward and rights to backward
     }
     
   }

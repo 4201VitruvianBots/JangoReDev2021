@@ -43,6 +43,7 @@ public class SetTankDrive extends CommandBase {
   public void execute() {
     double leftOutput = m_container.getLeftJoystickY();
     double rightOutput = m_container.getRightJoystickY();
+    // Sets motors to joystick input as long as they're not within deadzone
     if (Math.abs(leftOutput) < Constants.deadZone) {
       leftOutput = 0;
     }

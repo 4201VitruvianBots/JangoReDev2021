@@ -44,6 +44,7 @@ public class SwerveTurnAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_drivetrain.setTankDrive((m_angle > 0 ? m_power : 0), (m_angle > 0 ? 0 : m_power));
     if (m_angle > 0) {
       m_drivetrain.setTankDrive(m_power, 0);
     } else {
