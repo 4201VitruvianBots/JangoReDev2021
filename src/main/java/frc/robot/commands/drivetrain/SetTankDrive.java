@@ -41,15 +41,9 @@ public class SetTankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftOutput = m_container.getLeftJoystickY();
-    double rightOutput = m_container.getRightJoystickY();
+    double leftOutput = Math.abs(m_container.getLeftJoystickY()) >= Constants.deadZone ? m_container.getLeftJoystickY() : 0;
+    double rightOutput = Math.abs(m_container.getRightJoystickY()) >= Constants.deadZone ? m_container.getRightJoystickY() : 0;
     // Sets motors to joystick input as long as they're not within deadzone
-    if (Math.abs(leftOutput) < Constants.deadZone) {
-      leftOutput = 0;
-    }
-    if (Math.abs(rightOutput) < Constants.deadZone) {
-      rightOutput = 0;
-    }
     m_drivetrain.setTankDrive(leftOutput, rightOutput);
   }
 

@@ -31,24 +31,24 @@ public class SetShiftersForward extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
-    startTime = Timer.getFPGATimestamp();
+    if (m_drivetrain.getShifterState()) {  
+    m_drivetrain.setDriveShifters(true); // Sets shifters to forward if they're currently reverse
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.setTankDrive(-m_power,-m_power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.setTankDrive(0,0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() >= startTime+m_time;
+    return true;
   }
 }

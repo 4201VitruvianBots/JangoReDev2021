@@ -42,7 +42,6 @@ public class DriveForward extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.setTankDrive(m_power, m_power); // Sets motors to move forward at a certain power
-  
 
    }
 

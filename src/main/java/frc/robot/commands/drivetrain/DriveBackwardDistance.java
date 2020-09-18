@@ -28,7 +28,7 @@ public class DriveBackwardDistance extends CommandBase {
     m_drivetrain = drivetrain;
     m_distance = -distance;
     m_power = -power;
-    m_time = m_distance / m_drivetrain.powerToSpeed(m_power);
+    m_time = m_distance / m_drivetrain.powerToSpeed(m_power); // Calculating amount of time command has to run for based on distance and speed
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }

@@ -20,14 +20,13 @@ public class Dance extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
   public Dance(DriveTrain drivetrain) {
-    addCommands(
-      new DriveForward(drivetrain, 2, 1),
-      new DriveBackward(drivetrain, 2, 1),
-      new PointTurn(drivetrain, true, 10, 1),
-      new DriveForward(drivetrain, 2, 1),
-      new DriveBackward(drivetrain, 2, 1),
-      new PointTurn(drivetrain, true, 10, 1)
-    );
+    double power = 0.5;
+    for (int i = 0; i < 2; i++) {
+      addCommands(
+        new DriveForward(drivetrain, 2, power), // Drive forward for 2 seconds
+        new DriveBackward(drivetrain, 2, power), // Drive backward for 2 seconds
+        new PointTurn(drivetrain, true, 10, power), // Turn counterclockwise for 10 seconds)
+      );
+    }
   }
-
 }

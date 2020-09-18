@@ -43,12 +43,7 @@ public class PointTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_direction) {
-      m_drivetrain.setArcadeDrive(0, -m_power); // Set right motors to forward and left motors to backward
-    } else {
-      m_drivetrain.setArcadeDrive(0, m_power); // Sets left motors to forward and rights to backward
-    }
-    
+    m_drivetrain.setArcadeDrive(0, m_direction ? -m_power : m_power); // Sets direction of turn depending on direction variable
   }
 
   // Called once the command ends or is interrupted.

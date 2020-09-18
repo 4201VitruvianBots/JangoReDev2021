@@ -23,7 +23,15 @@ public class COngLetterLGroup extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
   public COngLetterLGroup(DriveTrain drivetrain) {
-    addCommands(new DriveForward(drivetrain, 3, 0.5), new PointTurn(drivetrain, true, 6, 0.25), new DriveForward(drivetrain, 3, 0.5), new PointTurn(drivetrain, true, 6, 0.25), new DriveForward(drivetrain, 1.5, 0.5));
+    double drivePower = 0.5;
+    double turnPower = 0.25;
+    addCommands(
+      new DriveForward(drivetrain, 3, drivePower), // Drive forward for 3 seconds
+      new PointTurn(drivetrain, true, 6, turnPower), // Turn left for 6 seconds
+      new DriveForward(drivetrain, 3, drivePower), // Drive forward for 3 seconds
+      new PointTurn(drivetrain, true, 6, turnPower), // Turn left for 6 seconds
+      new DriveForward(drivetrain, 1.5, drivePower) // Drive forward for 1.5 seconds
+    );
   }
 
 }

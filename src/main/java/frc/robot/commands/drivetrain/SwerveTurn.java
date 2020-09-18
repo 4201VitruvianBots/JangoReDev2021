@@ -44,11 +44,7 @@ public class SwerveTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_direction) {
-      m_drivetrain.setTankDrive(0, m_power);
-    } else {
-      m_drivetrain.setTankDrive(m_power, 0);
-    }
+    m_drivetrain.setArcadeDrive(m_power / 2, m_direction ? -m_power / 2 : m_power / 2);
     
   }
 
