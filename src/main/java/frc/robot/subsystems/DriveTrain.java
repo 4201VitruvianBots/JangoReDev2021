@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -42,6 +43,26 @@ public class DriveTrain extends SubsystemBase {
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
   }
 
+  public double getRobotX() {
+    return 0; // Fix this based on sensor values
+  }
+
+  public double getRobotY() {
+    return 0; // Fix this based on sensor values
+  }
+
+  public double getRobotAngle() {
+    return 0; // Fix this based on sensor values
+  }
+
+  public double getLeftMotorsSpeed() {
+    return 0; // Fix this based on sensor values
+  }
+
+  public double getRightMotorsSpeed() {
+    return 0; // Fix this based on sensor values
+  }
+
   public void setTankDrive(double leftoutput, double rightoutput) { // Sets left motors to value of left joystick and right motors to value of right joystick
     leftMaster.set(ControlMode.PercentOutput, leftoutput);
     rightMaster.set(ControlMode.PercentOutput, rightoutput);
@@ -65,8 +86,21 @@ public class DriveTrain extends SubsystemBase {
     return Constants.falconRPM * power / 60 * gearRatio * 2 * Constants.wheelDiameter * Math.PI;
   }
 
+  public void updateSmartDashboard() {
+    SmartDashboard.putBoolean("Shifter State", getShifterState());
+
+    SmartDashboard.putNumber("Robot x position", getRobotX());
+    SmartDashboard.putNumber("Robot y position", getRobotY());
+
+    SmartDashboard.putNumber("Robot angle", getRobotAngle());
+    
+    SmartDashboard.putNumber("Left motors speed", getLeftMotorsSpeed());
+    SmartDashboard.putNumber("Right motors speed", getRightMotorsSpeed());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateSmartDashboard();
   }
 }

@@ -25,7 +25,7 @@ public class Dance extends SequentialCommandGroup {
       addCommands(
         new DriveForward(drivetrain, 2, power), // Drive forward for 2 seconds
         new DriveBackward(drivetrain, 2, power), // Drive backward for 2 seconds
-        new PointTurn(drivetrain, true, 10, power), // Turn counterclockwise for 10 seconds)
+        new PointTurn(drivetrain, true, 10, power) // Turn counterclockwise for 10 seconds)
       );
     }
   }

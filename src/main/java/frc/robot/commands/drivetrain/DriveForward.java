@@ -8,6 +8,7 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -41,6 +42,9 @@ public class DriveForward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Driving forward at power", m_power);
+    SmartDashboard.putNumber("Time left", m_time + start_time - Timer.getFPGATimestamp());
+
     m_drivetrain.setTankDrive(m_power, m_power); // Sets motors to move forward at a certain power
 
    }
