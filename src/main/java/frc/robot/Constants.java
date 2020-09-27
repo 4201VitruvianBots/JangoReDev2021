@@ -31,4 +31,8 @@ public final class Constants {
     public static final int rightjoystick = 25;
 
 
+    public static final int indexerMotor = 30;
+    public static final int intakeSensor = 31;
+    public static final  int indexerTopSensor = 32;
+    public static final int indexerBottomSensor = 33;
 }

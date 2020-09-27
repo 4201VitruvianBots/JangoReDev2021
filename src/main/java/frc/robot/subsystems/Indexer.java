@@ -19,9 +19,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
+import frc.robot.Constants;
 
 /*
 Susbsystem for interacting with the robot's indexer (feeds balls from intake to shooter)
@@ -177,10 +176,10 @@ public class Indexer extends SubsystemBase {
   }
 
   private void updateSmartDashboard(){
-    SmartDashboardTab.putBoolean("Indexer","Intake Sensor", getIntakeSensor());
-    SmartDashboardTab.putBoolean("Indexer","Indexer Bottom Sensor", getIndexerBottomSensor());
-    SmartDashboardTab.putBoolean("Indexer","Indexer Top Sensor", getIndexerTopSensor());
-    SmartDashboardTab.putNumber("Indexer", "Indexer Control Mode", controlMode);
+    SmartDashboard.putBoolean("Intake Sensor", getIntakeSensor());
+    SmartDashboard.putBoolean("Indexer Bottom Sensor", getIndexerBottomSensor());
+    SmartDashboard.putBoolean("Indexer Top Sensor", getIndexerTopSensor());
+    SmartDashboard.putNumber("Indexer Control Mode", controlMode);
 
   }
 
