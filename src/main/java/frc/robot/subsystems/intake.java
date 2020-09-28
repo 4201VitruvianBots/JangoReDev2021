@@ -28,6 +28,7 @@ public class intake extends SubsystemBase {
   private CANSparkMax intakeMotor =  new CANSparkMax(Constants.intakeMotor, MotorType.kBrushless);
   DoubleSolenoid intakePiston = new DoubleSolenoid(Constants.pcmOne, Constants.intakePistonForward, Constants.intakePistonReverse);
   private boolean intaking = false;
+  DigitalInput intakeSensor = new DigitalInput(Constants.intakeSensor);
   public intake() {
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -50,6 +51,9 @@ public class intake extends SubsystemBase {
   }
   public void setIntakePercentOutput(double value){
     intakeMotor.set(value);
+  }
+  public boolean getSeeBall(){
+    return intakeSensor.getStatus();  
   }
   private void updateSmartDashboard() {
     SmartDashboardTab.putBoolean("Intake", "Intake State", getIntakingState());

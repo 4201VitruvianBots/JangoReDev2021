@@ -40,9 +40,12 @@ public class SetIntakeManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_indexer.setIndexerOutput(1);
-    m_indexer.setKickerOutput(-0.25);
-    m_intake.setIntakePercentOutput(0.5);
+    if (m_intake.getSeeBall()){
+      m_indexer.setIndexerOutput(1);
+      m_indexer.setKickerOutput(-0.25);
+      m_intake.setIntakePercentOutput(0.5);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

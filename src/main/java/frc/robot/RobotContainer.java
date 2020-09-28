@@ -30,6 +30,10 @@ public class RobotContainer {
 
   private final Kicker m_Kicker = new Kicker();
 
+  private final Indexer m_Indexer = new Indexer();
+
+  private final Intake m_Intake = new Intake();
+
   private final Joystick leftJoystick = new Joystick(Constants.leftjoystick);
 
   private final Joystick rightJoystick = new Joystick(Constants.rightjoystick);
@@ -65,8 +69,7 @@ public class RobotContainer {
 
   private Rotate rotate = new Rotate(m_Turret, leftJoystickX());
   
-  m_Shooter.setDefaultCommand(shoot);
-  m_Turret.setDefaultCommand(rotate);
+  private SetIntakeManual setIntakeManual = new setIntakeManual(m_Intake, m_Indexer);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
