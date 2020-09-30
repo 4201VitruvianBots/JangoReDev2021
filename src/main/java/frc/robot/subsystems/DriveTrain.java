@@ -63,6 +63,10 @@ public class DriveTrain extends SubsystemBase {
     return 0; // Fix this based on sensor values
   }
 
+  public double getRobotSpeed() {
+    return 0; // Fix this based on sensor values
+  }
+
   public void setTankDrive(double leftoutput, double rightoutput) { // Sets left motors to value of left joystick and right motors to value of right joystick
     leftMaster.set(ControlMode.PercentOutput, leftoutput);
     rightMaster.set(ControlMode.PercentOutput, rightoutput);
