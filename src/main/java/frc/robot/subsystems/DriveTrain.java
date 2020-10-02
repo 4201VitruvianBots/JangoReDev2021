@@ -8,9 +8,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,16 +26,29 @@ public class DriveTrain extends SubsystemBase {
    */
 
   // Creating motor controllers
-  private TalonSRX leftMaster = new TalonSRX(Constants.leftMaster);
-  private TalonSRX leftSlave = new TalonSRX(Constants.leftSlave);
-  private TalonSRX rightMaster = new TalonSRX(Constants.rightMaster);
-  private TalonSRX rightSlave = new TalonSRX(Constants.rightSlave);
+  private TalonFX leftMaster = new TalonFX(Constants.leftMaster);
+  private TalonFX leftSlave = new TalonFX(Constants.leftSlave);
+  private TalonFX rightMaster = new TalonFX(Constants.rightMaster);
+  private TalonFX rightSlave = new TalonFX(Constants.rightSlave);
+
+  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Constants.wheelDistance));
 
   // Drive shifters
   private DoubleSolenoid shifters = new DoubleSolenoid(Constants.pcmOne, Constants.driveTrainShiftersForward, Constants.driveTrainShiftersReverse);
 
+  private ChassisSpeeds currentSpeeds;
+
   public DriveTrain() {
-    // Make sure motors and not inverted
+    double xPosition = 0;
+    double yPosition = 0;
+    
+    // Configure motors
+    leftMaster.configFactoryDefault();
+    rightMaster.configFactoryDefault();
+    leftSlave.configFactoryDefault();
+    rightSlave.configFactoryDefault();
+
+    // Make sure motors are not inverted
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
     rightMaster.setInverted(false);
@@ -41,6 +57,10 @@ public class DriveTrain extends SubsystemBase {
     // Make sure slave motors are receving same power as master motors
     leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+  }
+
+  public double getGearRatio() {
+    return getShifterState() ? Constants.gearRatioHigh : Constants.gearRatioLow;
   }
 
   public double getRobotX() {
@@ -55,16 +75,18 @@ public class DriveTrain extends SubsystemBase {
     return 0; // Fix this based on sensor values
   }
 
-  public double getLeftMotorsSpeed() {
-    return 0; // Fix this based on sensor values
+  public DifferentialDriveWheelSpeeds getSpeeds() { // Returns a differential drive wheel speeds with left and right speeds
+    // Left wheel speed in meters per second
+    double leftWheelSpeed = Units.inchesToMeters(leftMaster.getSelectedSensorVelocity() * 10 / 4096 * getGearRatio() * Constants.wheelDiameter * Math.PI);
+
+    // Right wheel speed in meters per second
+    double rightWheelSpeed = Units.inchesToMeters(rightMaster.getSelectedSensorVelocity() * 10 / 4096 * getGearRatio() * Constants.wheelDiameter * Math.PI);
+
+    return new DifferentialDriveWheelSpeeds(leftWheelSpeed, rightWheelSpeed);
   }
 
-  public double getRightMotorsSpeed() {
-    return 0; // Fix this based on sensor values
-  }
-
-  public double getRobotSpeed() {
-    return 0; // Fix this based on sensor values
+  public ChassisSpeeds getRobotSpeed() { // Returns ChassisSpeeds object holding forward and angular velocity of robot
+  return kinematics.toChassisSpeeds(getSpeeds());
   }
 
   public void setTankDrive(double leftoutput, double rightoutput) { // Sets left motors to value of left joystick and right motors to value of right joystick
@@ -86,8 +108,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double powerToSpeed(double power) {
-    double gearRatio = getShifterState() ? Constants.gearRatioHigh : Constants.gearRatioLow;
-    return Constants.falconRPM * power / 60 * gearRatio * 2 * Constants.wheelDiameter * Math.PI;
+    return Constants.falconRPM * power / 60 * getGearRatio() * Constants.wheelDiameter * Math.PI;
   }
 
   public void updateSmartDashboard() {
@@ -98,13 +119,17 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Robot angle", getRobotAngle());
     
-    SmartDashboard.putNumber("Left motors speed", getLeftMotorsSpeed());
-    SmartDashboard.putNumber("Right motors speed", getRightMotorsSpeed());
+    ChassisSpeeds currentSpeeds = getRobotSpeed();
+    SmartDashboard.putNumber("Linear velocity", currentSpeeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("Angular velocity", currentSpeeds.omegaRadiansPerSecond);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    currentSpeeds = getRobotSpeed();
     updateSmartDashboard();
   }
 }
