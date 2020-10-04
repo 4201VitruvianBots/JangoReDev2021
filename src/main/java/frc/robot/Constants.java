@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.Turret;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -34,4 +36,8 @@ public final class Constants {
     public static final int intakeSensor = 31;
     public static final  int indexerTopSensor = 32;
     public static final int indexerBottomSensor = 33;
+    public static int intakeMotor;
+    public static int pcmOne;
+    public static int intakePistonForward;
+    public static int intakePistonReverse;
 }

@@ -9,9 +9,6 @@ package frc.robot.commands.indexer;
 
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -20,16 +17,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class EjectAll extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Indexer m_indexer;
-  private final Intake m_shooter;
+  private final Intake m_intake;
   /**
    * Creates a new ExampleCommand.
    *
-   * @param subsystem The subsystem used by this command.
+   * @param indexer a subsystem used by this command.
+   * @param intake a subsystem used by this command.
    */
 
   public EjectAll(Indexer indexer, Intake intake) {
     m_indexer = indexer;
-    m_shooter = intake;
+    m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(indexer);
     addRequirements(intake);
@@ -45,7 +43,7 @@ public class EjectAll extends CommandBase {
   public void execute() {
     m_indexer.setIndexerOutput(-0.6);
     m_indexer.setKickerOutput(-0.5);
-    m_shooter.setIntakePercentOutput(-0.5);
+    m_intake.setIntakePercentOutput(-0.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -53,7 +51,8 @@ public class EjectAll extends CommandBase {
   public void end(final boolean interrupted) {  
     m_indexer.setKickerOutput(0);
     m_indexer.setIndexerOutput(0);
-    m_shooter.setIntakePercentOutput(0);
+    m_intake.setIntakePercentOutput(0);
+    m_intake.updateCounter(false,true);
   }
 
   // Returns true when the command should end.

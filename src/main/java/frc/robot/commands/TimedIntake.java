@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
+import java.sql.Time;
+
 public class TimedIntake extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Intake m_intake;
@@ -20,7 +22,7 @@ public class TimedIntake extends CommandBase {
   /**
    * Creates a new TimedIntake.
    */
-  public TimedIntake() {
+  public TimedIntake(Intake intake, Indexer indexer, double time) {
     m_intake = intake;
     m_indexer = indexer;
     m_time = time;

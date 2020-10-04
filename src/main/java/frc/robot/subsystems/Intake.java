@@ -7,21 +7,15 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ControlType;
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-import frc.robot.constants.Constants;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-public class intake extends SubsystemBase {
+public class Intake extends SubsystemBase {
   /**
    * Creates a new intake.
    */
@@ -29,7 +23,10 @@ public class intake extends SubsystemBase {
   DoubleSolenoid intakePiston = new DoubleSolenoid(Constants.pcmOne, Constants.intakePistonForward, Constants.intakePistonReverse);
   private boolean intaking = false;
   DigitalInput intakeSensor = new DigitalInput(Constants.intakeSensor);
-  public intake() {
+  public int counter = 0;
+  public boolean BallShadow = false;
+
+  public Intake() {
     intakeMotor.restoreFactoryDefaults();
     intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     intakeMotor.setInverted(false);
@@ -53,15 +50,36 @@ public class intake extends SubsystemBase {
     intakeMotor.set(value);
   }
   public boolean getSeeBall(){
-    return intakeSensor.getStatus();  
+    return intakeSensor.get();
   }
-  private void updateSmartDashboard() {
-    SmartDashboardTab.putBoolean("Intake", "Intake State", getIntakingState());
-    SmartDashboardTab.putBoolean("Intake", "Pistons", getIntakePistonExtendStatus());
+  public void updateCounter(boolean dec, boolean eject){
+    if(eject){
+      counter = 0;
+      return;
+    }
+    if(dec){
+      counter--;
+      return;
+    }
+    if(getSeeBall() && !BallShadow) {
+      counter++;
+      BallShadow = true;
+    }else{
+      BallShadow = false;
+    }
   }
+  public int getCounter(){
+    return counter;
+  }
+
+//  private void updateSmartDashboard() {
+//    SmartDashboardTab.putBoolean("Intake", "Intake State", getIntakingState());
+//    SmartDashboardTab.putBoolean("Intake", "Pistons", getIntakePistonExtendStatus());
+//  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updateSmartDashboard();
+//    updateSmartDashboard();
+    updateCounter(false, false);
   }
 }

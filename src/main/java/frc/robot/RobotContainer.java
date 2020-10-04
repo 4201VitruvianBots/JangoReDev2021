@@ -40,11 +40,10 @@ public class RobotContainer {
 
   private final JoystickButton oneButton = new JoystickButton(leftJoystick, 1);
 
-
-
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -56,27 +55,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+
   private void configureButtonBindings() {
-    oneButton.whileHeld(new Kick(m_Kicker));
+    oneButton.whileHeld(new Kick(m_Kicker, m_Intake));
   }
+
   private double leftJoystickX() {
     return leftJoystick.getX();
   }
+
   private double rightJoystickY() {
     return rightJoystick.getY();
   }
+
   private Shoot shoot = new Shoot(m_Shooter, rightJoystickY());
 
-  private Rotate rotate = new Rotate(m_Turret, leftJoystickX());
+  private Rotate rotate = new Rotate(m_Turret);
   
-  private SetIntakeManual setIntakeManual = new setIntakeManual(m_Intake, m_Indexer);
+  private frc.robot.commands.intake.SetIntakeManual setIntakeManual = new setIntakeManual(m_Intake, m_Indexer);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+
 }
