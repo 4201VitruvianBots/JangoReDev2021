@@ -15,51 +15,37 @@ import frc.robot.Constants;
 /**
  * An example command that uses an example subsystem.
  */
-public class PointTurnSensorToAngle extends CommandBase {
+public class DriveSensorDistance extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private double m_angle, m_power;
-  private boolean direction; // true: clockwise, false: counterclockwise
-  private double withinAngle = 3; // Angle (in degrees) that robot must be within of target angle for command to finish
-
+  private double m_power, m_xPosition, m_yPosition;
+  private double distanceWithinPosition = 0.5; // How close robot has to be to target position for command to finish
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public PointTurnSensorToAngle(DriveTrain drivetrain, double angle, double power) {
+  public DriveSensorDistance(DriveTrain drivetrain, double power, double distance) {
     m_drivetrain = drivetrain;
-    m_angle = angle;
     m_power = power;
-    direction = angleBetween(m_drivetrain.getRobotAngle(), m_angle) > 0;
+    m_xPosition = distance * Math.sin(m_drivetrain.getRobotAngle()*(Math.PI/180)) + m_drivetrain.getRobotX();
+    m_yPosition = distance * Math.cos(m_drivetrain.getRobotAngle()*(Math.PI/180)) + m_drivetrain.getRobotY();
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
-  }
-
-  private double angleBetween(double currentAngle, double targetAngle) {
-    double m_currentAngle = currentAngle % 360;
-    double m_targetAngle = targetAngle % 360;
-    if(m_targetAngle < m_currentAngle) {
-      m_targetAngle = m_targetAngle + 360;
-    }
-    if(m_targetAngle - m_currentAngle > 180) {
-      return (m_targetAngle - m_currentAngle - 360);
-    } else {
-      return (m_targetAngle - m_currentAngle);
-    }
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.setArcadeDrive(0, direction ? m_power : -m_power);
-    // Sets motors to joystick input as long as they're not within deadzone
+    m_drivetrain.setTankDrive(m_power, m_power);
   }
 
   // Called once the command ends or is interrupted.
@@ -70,6 +56,6 @@ public class PointTurnSensorToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_angle - m_drivetrain.getRobotAngle()) <= withinAngle;
+    return Math.abs(m_xPosition - m_drivetrain.getRobotX()) < distanceWithinPosition && Math.abs(m_yPosition - m_drivetrain.getRobotY()) < distanceWithinPosition;
   }
 }
