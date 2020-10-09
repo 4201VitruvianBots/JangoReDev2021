@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import sun.security.jca.ProviderConfig;
+
 import java.lang.Math;
 
 public class DriveTrain extends SubsystemBase {
@@ -26,12 +28,20 @@ public class DriveTrain extends SubsystemBase {
    */
 
   // Creating motor controllers
+
+  private double kP = 1;
+  private double kI = 0;
+  private double kD = 0;
+
   private TalonFX leftMaster = new TalonFX(Constants.leftMaster);
   private TalonFX leftSlave = new TalonFX(Constants.leftSlave);
   private TalonFX rightMaster = new TalonFX(Constants.rightMaster);
   private TalonFX rightSlave = new TalonFX(Constants.rightSlave);
 
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Constants.wheelDistance));
+
+  private PIDController rightPIDController = new PIDController(kP, kI, kD);
+  private PIDController leftPIDController = new PIDController(kP, kI, kD);
 
   // Drive shifters
   private DoubleSolenoid shifters = new DoubleSolenoid(Constants.pcmOne, Constants.driveTrainShiftersForward, Constants.driveTrainShiftersReverse);
@@ -94,9 +104,21 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.set(ControlMode.PercentOutput, rightoutput);
   }
 
+  public void setTankDriveWithPID(double leftOutput, double rightOutput) {
+    DifferentialDriveWheelSpeeds wheelSpeeds = getSpeeds();
+    leftMaster.set(ControlMode.PercentOutput, leftPIDController.calculcate(wheelSpeeds.leftMetersPerSecond, leftOutput));
+    rightMaster.set(ControlMode.PercentOutput, rightPIDController.calculate(wheelSpeeds.rightMetersPerSecond, rightOutput));
+  }
+
   public void setArcadeDrive(double forwardPower, double turnPower) { // Move motors forward at a certain power, but changes that power to make robot turn
     leftMaster.set(ControlMode.PercentOutput, forwardPower + turnPower);
     rightMaster.set(ControlMode.PercentOutput, forwardPower - turnPower);
+  }
+
+  public void setDriveFromChassisSpeeds(ChassisSpeeds speeds) {
+    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
+    leftMaster.set(ControlMode.PercentOutput, wheelSpeeds.leftMetersPerSecond);
+    rightMaster.set(ControlMode.PercentOutput, wheelSpeeds.rightMetersPerSecond);
   }
 
   public void setDriveShifters(boolean state) {
@@ -111,6 +133,14 @@ public class DriveTrain extends SubsystemBase {
     return Constants.falconRPM * power / 60 * getGearRatio() * Constants.wheelDiameter * Math.PI;
   }
 
+  public PIDController getLeftPIDController() {
+    return leftPIDController;
+  }
+
+  public PIDController getRightPIDController() {
+    return rightPIDController;
+  }
+
   public void updateSmartDashboard() {
     SmartDashboard.putBoolean("Shifter State", getShifterState());
 
@@ -120,6 +150,10 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Robot angle", getRobotAngle());
     
     ChassisSpeeds currentSpeeds = getRobotSpeed();
+
+    SmartDashboard.putNumber("Left motor PID error", leftPIDController.getPositionError());
+    SmartDashbaord.putNumber("Right motor PID error", rightPIDController.getPositionError());
+    
     SmartDashboard.putNumber("Linear velocity", currentSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Angular velocity", currentSpeeds.omegaRadiansPerSecond);
 

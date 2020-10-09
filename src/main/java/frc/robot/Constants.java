@@ -39,4 +39,5 @@ public final class Constants {
     public static final int rightMaster = 22;
     public static final int rightSlave = 23;
 
+    public static final double timeBetweenScheduler = 0.02; // In seconds
 }
