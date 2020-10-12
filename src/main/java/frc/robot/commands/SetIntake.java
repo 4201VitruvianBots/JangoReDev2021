@@ -6,45 +6,47 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class SetIntake extends CommandBase {
-  private final Intake m_intake;
-  private double m_output;
-  /**
-   * Creates a new SetIntake.
-   */
+    private final Intake m_intake;
+    private final double m_output;
 
-  public SetIntake(Intake intake, double output) {
-    m_intake = intake;
-    m_output = output;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-  }
+    /**
+     * Creates a new SetIntake.
+     */
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  m_intake.setIntakingState(true);
-  }
+    public SetIntake(Intake intake, double output) {
+        m_intake = intake;
+        m_output = output;
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(intake);
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  m_intake.setIntakePercentOutput(m_output);
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        m_intake.setIntakingState(true);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  m_intake.setIntakePercentOutput(0);
-  m_intake.setIntakingState(false);
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_intake.setIntakePercentOutput(m_output);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_intake.setIntakePercentOutput(0);
+        m_intake.setIntakingState(false);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
