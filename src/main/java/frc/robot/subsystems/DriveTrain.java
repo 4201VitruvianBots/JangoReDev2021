@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
@@ -18,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import sun.security.jca.ProviderConfig;
 
 import java.lang.Math;
 
@@ -83,6 +83,7 @@ public class DriveTrain extends SubsystemBase {
 
   public double getRobotAngle() {
     return 0; // Fix this based on sensor values
+      // Between -180 and 180
   }
 
   public DifferentialDriveWheelSpeeds getSpeeds() { // Returns a differential drive wheel speeds with left and right speeds
@@ -133,6 +134,10 @@ public class DriveTrain extends SubsystemBase {
     return Constants.falconRPM * power / 60 * getGearRatio() * Constants.wheelDiameter * Math.PI;
   }
 
+  public double speedToPower(double speed) {
+    return speed / Constants.wheelDiameter / 2 / Math.PI / getGearRatio() * 60 / Constants.falconRPM;
+  }
+
   public PIDController getLeftPIDController() {
     return leftPIDController;
   }
@@ -152,7 +157,7 @@ public class DriveTrain extends SubsystemBase {
     ChassisSpeeds currentSpeeds = getRobotSpeed();
 
     SmartDashboard.putNumber("Left motor PID error", leftPIDController.getPositionError());
-    SmartDashbaord.putNumber("Right motor PID error", rightPIDController.getPositionError());
+    SmartDashboard.putNumber("Right motor PID error", rightPIDController.getPositionError());
     
     SmartDashboard.putNumber("Linear velocity", currentSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Angular velocity", currentSpeeds.omegaRadiansPerSecond);
