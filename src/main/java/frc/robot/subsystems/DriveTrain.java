@@ -107,7 +107,7 @@ public class DriveTrain extends SubsystemBase {
 
   public void setTankDriveWithPID(double leftOutput, double rightOutput) {
     DifferentialDriveWheelSpeeds wheelSpeeds = getSpeeds();
-    leftMaster.set(ControlMode.PercentOutput, leftPIDController.calculcate(wheelSpeeds.leftMetersPerSecond, leftOutput));
+    leftMaster.set(ControlMode.PercentOutput, leftPIDController.calculate(wheelSpeeds.leftMetersPerSecond, leftOutput));
     rightMaster.set(ControlMode.PercentOutput, rightPIDController.calculate(wheelSpeeds.rightMetersPerSecond, rightOutput));
   }
 
