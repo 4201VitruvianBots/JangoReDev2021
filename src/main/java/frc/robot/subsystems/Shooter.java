@@ -18,7 +18,6 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
     /**
      * Creates a new Shooter.
-     * (╯‵□′)╯︵┻━┻
      */
     double kP = 0.1;
     double kI = 0;

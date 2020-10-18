@@ -36,7 +36,7 @@ public class Rotate extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_subsystem.setAngle(m_subsystem.getAng());
+        m_subsystem.setAngle(m_subsystem.getAngle());
     }
 
     // Called once the command ends or is interrupted.

@@ -22,9 +22,10 @@ public class ControlledtimedIntake extends CommandBase {
 
     private final double intakeRPM = 5000;
     private final double indexRPM = 300;
+    private final Joystick m_controller;
     private double timestamp, intakeTimestamp, indexerTimestamp, fourBallTimestamp;
     private boolean intaking, haveFour, haveFourTripped;
-    private final Joystick m_controller;
+    private final int m_time;
 
     private IntakeStates intakeState = IntakeStates.INTAKE_EMPTY;
 
@@ -54,7 +55,7 @@ public class ControlledtimedIntake extends CommandBase {
             intakeState = IntakeStates.INTAKE_ONE_BALL;
 
 
-        startTime = Timer.getFPGATimestamp();
+        timestamp = Timer.getFPGATimestamp();
         if (m_intake.getIntakePistonExtendStatus() != true)
             m_intake.setintakePiston(true);
     }
@@ -88,22 +89,25 @@ public class ControlledtimedIntake extends CommandBase {
                 }
 
                 // Called once the command ends or is interrupted.
-                @Override
-                public void end ( boolean interrupted){
-                m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-                m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-                m_intake.setIntakingState(false);
-                m_intake.setIntakePercentOutput(0);
-                m_indexer.setIndexerOutput(0);
-                m_indexer.setKickerOutput(0);
-                if (intakeState == IntakeStates.INTAKE_FIVE_BALLS)
-                    m_intake.setintakePiston(false);
-            }
-
-            // Returns true when the command should end.
-            @Override
-            public boolean isFinished () {
-                return Timer.getFPGATimestamp() - startTime > m_time;
-                return intakeState == INTAKE_FIVE_BALLS
-            }
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        m_controller.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        m_controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+        m_intake.setIntakingState(false);
+        m_intake.setIntakePercentOutput(0);
+        m_indexer.setIndexerOutput(0);
+        m_indexer.setKickerOutput(0);
+        if (intakeState == IntakeStates.INTAKE_FIVE_BALLS)
+            m_intake.setintakePiston(false);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return Timer.getFPGATimestamp() - timestamp > m_time;
+        return intakeState == INTAKE_FIVE_BALLS;
+    }
+}
