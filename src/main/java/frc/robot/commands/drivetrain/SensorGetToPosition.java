@@ -15,7 +15,7 @@ import frc.robot.Constants;
 /**
  * An example command that uses an example subsystem.
  */
-public class SensorGetToPosition extends CommandBase {
+public class SensorGetToPosition extends CommandBase { // First turns to face, then drives directly toward a certain position using sensors
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double m_power, m_xPosition, m_yPosition; 
@@ -47,19 +47,19 @@ public class SensorGetToPosition extends CommandBase {
   @Override
   public void execute() {
     if (getDeltaAngleToTarget() > withinAngle) {
-      m_drivetrain.setTankDrive(m_power, 0);
-    } else if (getDeltaAngleToTarget() > withinAngle) {
+      m_drivetrain.setTankDrive(m_power, 0); // Turning clockwise if robot angle is too small
+    } else if (getDeltaAngleToTarget() < -withinAngle) { // Turning counterclockwise if robot angle is too large
       m_drivetrain.setTankDrive(0, m_power);
     } else {
-      m_drivetrain.setTankDrive(m_power, m_power);
+      m_drivetrain.setTankDrive(m_power, m_power); // Driving straight forward
     }
   }
 
   private double getDeltaAngleToTarget() {
-    double xDistance = m_xPosition - m_drivetrain.getRobotX();
-    double yDistance = m_yPosition - m_drivetrain.getRobotY();
-    double angleToTarget = ((Math.toDegrees(Math.atan(yDistance / xDistance)) + (xDistance < 0 ? 180 : 0)) + 180) % 360 - 180;
-    double deltaAngle = angleToTarget - m_drivetrain.getRobotAngle();
+    double xDistance = m_xPosition - m_drivetrain.getRobotX(); // How far away the target is in x-direction
+    double yDistance = m_yPosition - m_drivetrain.getRobotY(); // How far away the target is in y-direction
+    double angleToTarget = ((Math.toDegrees(Math.atan(yDistance / xDistance)) + (xDistance < 0 ? 180 : 0)) + 180) % 360 - 180; // Angle [-180, 180] to target position
+    double deltaAngle = angleToTarget - m_drivetrain.getRobotAngle(); // Angle robot must turn
     if (Math.abs(deltaAngle) > 180) {
       return 360 - deltaAngle;
     } else {
@@ -76,6 +76,7 @@ public class SensorGetToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Finished when xy distance to target is within a certain number
     double distance = Math.sqrt(Math.pow(m_drivetrain.getRobotX() - m_xPosition, 2) + Math.pow(m_drivetrain.getRobotY() - m_yPosition, 2));
     return distance <= distanceWithinPosition;
   }
