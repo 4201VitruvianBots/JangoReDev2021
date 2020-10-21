@@ -42,7 +42,7 @@ public class FindPathToPoint extends CommandBase {
   public void initialize() {
     initialAngle = m_drivetrain.getRobotAngle();
     leftRadius = m_radius + Constants.wheelDistance / 2 * (m_angle > 0 ? -1 : 1);
-    rightRadius = m_radius + Constants.wheelDiameter / 2 * (m_angle > 0 ? 1 : -1);
+    rightRadius = m_radius + Constants.wheelDistance / 2 * (m_angle > 0 ? 1 : -1);
     double maxSpeed = m_drivetrain.powerToSpeed(m_maxPower);
     double maxPower = m_drivetrain.speedToPower(maxSpeed);
     double time = Math.PI * m_angle * Math.max(leftRadius, rightRadius) / 180;
