@@ -40,15 +40,14 @@ public class PointTurnSensorToAngle extends CommandBase {
   private double angleBetween(double currentAngle, double targetAngle) {
     double m_currentAngle = currentAngle % 360;
     double m_targetAngle = targetAngle % 360;
-    // if(m_targetAngle < m_currentAngle) {
-    //   m_targetAngle = m_targetAngle + 360;
-    // }
-    // if(m_targetAngle - m_currentAngle > 180) {
-    //   return (m_targetAngle - m_currentAngle - 360);
-    // } else {
-    //   return (m_targetAngle - m_currentAngle);
-    // }
-    return (m_targetAngle - m_currentAngle + 180) % 360 - 180;
+    if(m_targetAngle < m_currentAngle) {
+      m_targetAngle = m_targetAngle + 360;
+    }
+    if(m_targetAngle - m_currentAngle > 180) {
+      return (m_targetAngle - m_currentAngle - 360);
+    } else {
+      return (m_targetAngle - m_currentAngle);
+    }
   }
 
   // Called when the command is initially scheduled.
