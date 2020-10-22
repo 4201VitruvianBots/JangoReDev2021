@@ -20,14 +20,14 @@ public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from
   private final DriveTrain m_drivetrain;
   private double m_maxPower, m_targetX, m_targetY, leftRadius, rightRadius, leftPower, rightPower, initialAngle; 
   private double distanceWithinPosition = 0.1; // How close robot has to be to target position for command to finish
-  private double withinAngle = 3;
+  // private double withinAngle = 3;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SwerveTurnToPoint(DriveTrain drivetrain, double maxPower, double targetX, targetY) {
+  public SwerveTurnToPoint(DriveTrain drivetrain, double maxPower, double targetX, double targetY) {
     m_drivetrain = drivetrain;
     m_maxPower = maxPower;
     m_targetX = targetX;
@@ -41,14 +41,14 @@ public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from
   @Override
   public void initialize() {
     initialAngle = m_drivetrain.getRobotAngle();
-    double changeInAngle = Math.atan(targetY / targetX) - initialAngle;
-    double radius = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2)));
+    double changeInAngle = Math.atan(m_targetY / m_targetX) - initialAngle;
+    double radius = Math.sqrt(Math.pow(m_targetX, 2) + Math.pow(m_targetY, 2));
     leftRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? -1 : 1);
     rightRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? 1 : -1);
     double maxSpeed = m_drivetrain.powerToSpeed(m_maxPower);
     double maxPower = m_drivetrain.speedToPower(maxSpeed);
     double time = Math.PI * changeInAngle * Math.max(leftRadius, rightRadius) / 180;
-    double minSpeed = Math.PI * changeInAngle * m_radius / 180 / time;
+    double minSpeed = Math.PI * changeInAngle * radius / 180 / time;
     double minPower = m_drivetrain.speedToPower(minSpeed);
     leftPower = changeInAngle > 0 ? minPower : maxPower;
     rightPower = changeInAngle > 0 ? maxPower : minPower;
@@ -70,6 +70,6 @@ public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drivetrain.getRobotAngle() - initialAngle - changeInAngle) < withinAngle;
+    return Math.abs(m_drivetrain.getRobotAngle() - initialAngle - changeInAngle) < distanceWithinPosition; // <-- changeInAngle is not within the scope of the function isFinished()
   }
 }
