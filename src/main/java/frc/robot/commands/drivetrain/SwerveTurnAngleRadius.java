@@ -15,10 +15,10 @@ import frc.robot.Constants;
 /**
  * An example command that uses an example subsystem.
  */
-public class GoToPoint extends CommandBase { // Travels in a circle from current position to a certain point
+public class SwerveTurnAngleRadius extends CommandBase { // Travels in a circle from one point to another with a certain radius and change in angle
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private double m_maxPower, m_targetX, m_targetY, leftRadius, rightRadius, leftPower, rightPower, initialAngle; 
+  private double m_maxPower, m_angle, m_radius, leftRadius, rightRadius, leftPower, rightPower, initialAngle; 
   private double distanceWithinPosition = 0.1; // How close robot has to be to target position for command to finish
   private double withinAngle = 3;
 
@@ -27,11 +27,11 @@ public class GoToPoint extends CommandBase { // Travels in a circle from current
    *
    * @param subsystem The subsystem used by this command.
    */
-  public GoToPoint(DriveTrain drivetrain, double maxPower, double targetX, targetY) {
+  public SwerveTurnAngleRadius(DriveTrain drivetrain, double maxPower, double radius, double angle) {
     m_drivetrain = drivetrain;
     m_maxPower = maxPower;
-    m_targetX = targetX;
-    m_targetY = targetY;
+    m_radius = radius;
+    m_angle = angle;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -41,17 +41,15 @@ public class GoToPoint extends CommandBase { // Travels in a circle from current
   @Override
   public void initialize() {
     initialAngle = m_drivetrain.getRobotAngle();
-    double changeInAngle = Math.atan(targetY / targetX) - initialAngle;
-    double radius = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2)));
-    leftRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? -1 : 1);
-    rightRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? 1 : -1);
+    leftRadius = m_radius + Constants.wheelDistance / 2 * (m_angle > 0 ? -1 : 1);
+    rightRadius = m_radius + Constants.wheelDistance / 2 * (m_angle > 0 ? 1 : -1);
     double maxSpeed = m_drivetrain.powerToSpeed(m_maxPower);
     double maxPower = m_drivetrain.speedToPower(maxSpeed);
-    double time = Math.PI * changeInAngle * Math.max(leftRadius, rightRadius) / 180;
-    double minSpeed = Math.PI * changeInAngle * m_radius / 180 / time;
+    double time = Math.PI * m_angle * Math.max(leftRadius, rightRadius) / 180;
+    double minSpeed = Math.PI * m_angle * m_radius / 180 / time;
     double minPower = m_drivetrain.speedToPower(minSpeed);
-    leftPower = changeInAngle > 0 ? minPower : maxPower;
-    rightPower = changeInAngle > 0 ? maxPower : minPower;
+    leftPower = m_angle > 0 ? minPower : maxPower;
+    rightPower = m_angle > 0 ? maxPower : minPower;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -70,6 +68,6 @@ public class GoToPoint extends CommandBase { // Travels in a circle from current
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drivetrain.getRobotAngle() - initialAngle - changeInAngle) < withinAngle;
+    return Math.abs(m_drivetrain.getRobotAngle() - initialAngle - m_angle) < withinAngle;
   }
 }
