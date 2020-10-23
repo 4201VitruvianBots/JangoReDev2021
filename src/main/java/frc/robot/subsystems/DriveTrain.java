@@ -11,9 +11,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
@@ -39,6 +44,8 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX rightSlave = new TalonFX(Constants.rightSlave);
 
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Constants.wheelDistance));
+  private AHRS navx = new AHRS(SerialPort.Port.kMXP);
+  private DifferentialDriveOdometry odometry;
 
   private PIDController rightPIDController = new PIDController(kP, kI, kD);
   private PIDController leftPIDController = new PIDController(kP, kI, kD);
@@ -67,23 +74,28 @@ public class DriveTrain extends SubsystemBase {
     // Make sure slave motors are receving same power as master motors
     leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
     rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+
+    odometry = new DifferentialDriveOdometry(new Rotation2d(Math.toRadians(getRobotHeading())));
   }
 
   public double getGearRatio() {
     return getShifterState() ? Constants.gearRatioHigh : Constants.gearRatioLow;
   }
 
-  public double getRobotX() {
-    return 0; // Fix this based on sensor values
+  public double getRobotHeading() {
+    return navx.getRotation() % 360;
   }
 
-  public double getRobotY() {
-    return 0; // Fix this based on sensor values
+  public Pose2d getRobotPosition() { // Gets robot's current x & y position and angle
+    return odometry.getPoseMeters();
   }
 
-  public double getRobotAngle() {
-    return 0; // Fix this based on sensor values
-      // Between -180 and 180
+  public double getLeftSensorDistance() {
+    return leftMaster.getSelectedSensorPosition() / 4096 * getGearRatio() * Constants.wheelDiameter * Math.PI;
+  }
+
+  public double getRightSensorDistance() {
+    return rightMaster.getSelectedSensorPosition() / 4096 * getGearRatio() * Constants.wheelDiameter * Math.PI;
   }
 
   public DifferentialDriveWheelSpeeds getSpeeds() { // Returns a differential drive wheel speeds with left and right speeds
@@ -105,7 +117,7 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.set(ControlMode.PercentOutput, rightoutput);
   }
 
-  public void setTankDriveWithPID(double leftOutput, double rightOutput) {
+  public void setTankDriveWithPID(double leftOutput, double rightOutput) { // Sets left and right motors to PID controller input
     DifferentialDriveWheelSpeeds wheelSpeeds = getSpeeds();
     leftMaster.set(ControlMode.PercentOutput, leftPIDController.calculate(wheelSpeeds.leftMetersPerSecond, leftOutput));
     rightMaster.set(ControlMode.PercentOutput, rightPIDController.calculate(wheelSpeeds.rightMetersPerSecond, rightOutput));
@@ -117,7 +129,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setDriveFromChassisSpeeds(ChassisSpeeds speeds) {
-    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
+    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds); // Converts linear and angular velocities to left and right speeds
     leftMaster.set(ControlMode.PercentOutput, wheelSpeeds.leftMetersPerSecond);
     rightMaster.set(ControlMode.PercentOutput, wheelSpeeds.rightMetersPerSecond);
   }
@@ -149,10 +161,12 @@ public class DriveTrain extends SubsystemBase {
   public void updateSmartDashboard() {
     SmartDashboard.putBoolean("Shifter State", getShifterState());
 
-    SmartDashboard.putNumber("Robot x position", getRobotX());
-    SmartDashboard.putNumber("Robot y position", getRobotY());
+    Pose2d currentPosition = getRobotPosition();
 
-    SmartDashboard.putNumber("Robot angle", getRobotAngle());
+    SmartDashboard.putNumber("Robot x position", currentPosition.getTranslation().getX());
+    SmartDashboard.putNumber("Robot y position", currentPosition.getTranslation().getY());
+
+    SmartDashboard.putNumber("Robot angle", currentPosition.getRotation().getRadians());
     
     ChassisSpeeds currentSpeeds = getRobotSpeed();
 
@@ -169,6 +183,7 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
 
     currentSpeeds = getRobotSpeed();
+    odometry.update(new Rotation2d(getRobotHeading()), getLeftSensorDistance(), getRightSensorDistance());
     updateSmartDashboard();
   }
 }

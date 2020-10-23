@@ -17,13 +17,14 @@ import frc.robot.Constants;
 /**
  * An example command that uses an example subsystem.
  */
-public class PointTurnPIDToAngle extends CommandBase {
+public class PointTurnPIDToAngle extends CommandBase { // Point turns to a certain angle using sensors and PID loops
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
   private double m_angle, m_power;
   private boolean direction; // true: clockwise, false: counterclockwise
   private double withinAngle = 3; // Angle (in degrees) that robot must be within of target angle for command to finish
 
+  // PID constants of PID controller
   private double kP = 1;
   private double kI = 0;
   private double kD = 0;
@@ -40,14 +41,17 @@ public class PointTurnPIDToAngle extends CommandBase {
     m_drivetrain = drivetrain;
     m_angle = angle;
     m_power = power;
-    pidController.setSetpoint(angle);
-    pidController.setTolerance(withinAngle);
-    direction = angleBetween(m_drivetrain.getRobotAngle(), m_angle) > 0;
+    pidController.setSetpoint(angle); // We want the PID controller to turn the robot to this angle
+    pidController.setTolerance(withinAngle); // Tolerance of PID controller, how close it must be to target angle to be finisehd
+
+    direction = angleBetween(m_drivetrain.getRobotHeading(), m_angle) > 0; // Determines which direction to turn the robot
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
 
-  private double angleBetween(double currentAngle, double targetAngle) {
+  private double angleBetween(double currentAngle, double targetAngle) { // Gets difference between 2 angles (e.g. current of 30 degrees and target of 47 degrees results in 17)
+    // return (targetAngle % 360 - currentAngle % 360 + 180) % 360 - 180;
     double m_currentAngle = currentAngle % 360;
     double m_targetAngle = targetAngle % 360;
     if(m_targetAngle < m_currentAngle) {
@@ -69,7 +73,7 @@ public class PointTurnPIDToAngle extends CommandBase {
   @Override
   public void execute() { // Uses PID controller output to determine angular velocity, then sets motors to that velocity with a linear velocity of 0
     m_drivetrain.setDriveFromChassisSpeeds(new ChassisSpeeds(
-      0, 0, (pidController.calculate(m_drivetrain.getRobotAngle(), m_angle) - m_drivetrain.getRobotAngle()) / Constants.timeBetweenScheduler)
+      0, 0, (pidController.calculate(m_drivetrain.getRobotHeading(), m_angle) - m_drivetrain.getRobotHeading()) / Constants.timeBetweenScheduler)
       );
   }
 

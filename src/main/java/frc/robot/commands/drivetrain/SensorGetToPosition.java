@@ -9,6 +9,7 @@ package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.lang.Math;
 import frc.robot.Constants;
@@ -21,6 +22,7 @@ public class SensorGetToPosition extends CommandBase { // First turns to face, t
   private double m_power, m_xPosition, m_yPosition; 
   private double distanceWithinPosition = 0.1; // How close robot has to be to target position for command to finish
   private double withinAngle = 5; // Robot has to be facing within this angle of target
+  Pose2d currentPosition;
 
   /**
    * Creates a new ExampleCommand.
@@ -46,6 +48,7 @@ public class SensorGetToPosition extends CommandBase { // First turns to face, t
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    currentPosition = m_drivetrain.getRobotPosition();
     if (getDeltaAngleToTarget() > withinAngle) {
       m_drivetrain.setTankDrive(m_power, 0); // Turning clockwise if robot angle is too small
     } else if (getDeltaAngleToTarget() < -withinAngle) { // Turning counterclockwise if robot angle is too large
@@ -56,10 +59,10 @@ public class SensorGetToPosition extends CommandBase { // First turns to face, t
   }
 
   private double getDeltaAngleToTarget() {
-    double xDistance = m_xPosition - m_drivetrain.getRobotX(); // How far away the target is in x-direction
-    double yDistance = m_yPosition - m_drivetrain.getRobotY(); // How far away the target is in y-direction
+    double xDistance = m_xPosition - currentPosition.getTranslation().getX(); // How far away the target is in x-direction
+    double yDistance = m_yPosition - currentPosition.getTranslation().getY(); // How far away the target is in y-direction
     double angleToTarget = ((Math.toDegrees(Math.atan(yDistance / xDistance)) + (xDistance < 0 ? 180 : 0)) + 180) % 360 - 180; // Angle [-180, 180] to target position
-    double deltaAngle = angleToTarget - m_drivetrain.getRobotAngle(); // Angle robot must turn
+    double deltaAngle = angleToTarget - m_drivetrain.getRobotHeading(); // Angle robot must turn
     if (Math.abs(deltaAngle) > 180) {
       return 360 - deltaAngle;
     } else {
@@ -77,7 +80,8 @@ public class SensorGetToPosition extends CommandBase { // First turns to face, t
   @Override
   public boolean isFinished() {
     // Finished when xy distance to target is within a certain number
-    double distance = Math.sqrt(Math.pow(m_drivetrain.getRobotX() - m_xPosition, 2) + Math.pow(m_drivetrain.getRobotY() - m_yPosition, 2));
+    double distance = Math.sqrt(Math.pow(currentPosition.getTranslation().getX() - m_xPosition, 2) 
+    + Math.pow(currentPosition.getTranslation().getY() - m_yPosition, 2));
     return distance <= distanceWithinPosition;
   }
 }

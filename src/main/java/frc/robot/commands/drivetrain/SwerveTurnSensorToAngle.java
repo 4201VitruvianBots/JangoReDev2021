@@ -32,7 +32,7 @@ public class SwerveTurnSensorToAngle extends CommandBase {
     m_drivetrain = drivetrain;
     m_angle = angle;
     m_power = power;
-    direction = angleBetween(m_drivetrain.getRobotAngle(), m_angle) > 0;
+    direction = angleBetween(m_drivetrain.getRobotHeading(), m_angle) > 0;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -73,6 +73,6 @@ public class SwerveTurnSensorToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_angle - m_drivetrain.getRobotAngle()) <= withinAngle;
+    return Math.abs(m_angle - m_drivetrain.getRobotHeading()) <= withinAngle;
   }
 }

@@ -9,6 +9,7 @@ package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.lang.Math;
 import frc.robot.Constants;
@@ -56,7 +57,9 @@ public class DriveSensorToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double distance = Math.sqrt(Math.pow(m_drivetrain.getRobotX() - m_xPosition, 2) + Math.pow(m_drivetrain.getRobotY() - m_yPosition, 2));
+    Pose2d currentPosition = m_drivetrain.getRobotPosition();
+    double distance = Math.sqrt(Math.pow(currentPosition.getTranslation().getX() - m_xPosition, 2) + 
+    Math.pow(currentPosition.getTranslation().getY() - m_yPosition, 2));
     return distance <= distanceWithinPosition;
   }
 }

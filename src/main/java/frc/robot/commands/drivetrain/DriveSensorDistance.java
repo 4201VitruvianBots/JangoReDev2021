@@ -9,6 +9,7 @@ package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.lang.Math;
 import frc.robot.Constants;
@@ -29,8 +30,9 @@ public class DriveSensorDistance extends CommandBase {
   public DriveSensorDistance(DriveTrain drivetrain, double power, double distance) {
     m_drivetrain = drivetrain;
     m_power = power;
-    m_xPosition = distance * Math.sin(m_drivetrain.getRobotAngle()*(Math.PI/180)) + m_drivetrain.getRobotX();
-    m_yPosition = distance * Math.cos(m_drivetrain.getRobotAngle()*(Math.PI/180)) + m_drivetrain.getRobotY();
+    Pose2d startPosition = m_drivetrain.getRobotPosition();
+    m_xPosition = distance * Math.sin(m_drivetrain.getRobotHeading() * (Math.PI/180)) + startPosition.getTranslation().getX();
+    m_yPosition = distance * Math.cos(m_drivetrain.getRobotHeading() * (Math.PI/180)) + startPosition.getTranslation().getY();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -56,6 +58,8 @@ public class DriveSensorDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_xPosition - m_drivetrain.getRobotX()) < distanceWithinPosition && Math.abs(m_yPosition - m_drivetrain.getRobotY()) < distanceWithinPosition;
+    Pose2d currentPosition = m_drivetrain.getRobotPosition();
+    return Math.abs(m_xPosition - currentPosition.getTranslation().getX()) < distanceWithinPosition && 
+    Math.abs(m_yPosition - currentPosition.getTranslation().getY()) < distanceWithinPosition;
   }
 }

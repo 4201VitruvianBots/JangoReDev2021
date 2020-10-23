@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from current position to a certain point
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain m_drivetrain;
-  private double m_maxPower, m_targetX, m_targetY, leftRadius, rightRadius, leftPower, rightPower, initialAngle; 
+  private double m_maxPower, m_targetX, m_targetY, leftRadius, rightRadius, leftPower, rightPower, initialAngle, changeInAngle; 
   private double distanceWithinPosition = 0.1; // How close robot has to be to target position for command to finish
   // private double withinAngle = 3;
 
@@ -40,8 +40,8 @@ public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialAngle = m_drivetrain.getRobotAngle();
-    double changeInAngle = Math.atan(m_targetY / m_targetX) - initialAngle;
+    initialAngle = m_drivetrain.getRobotHeading();
+    changeInAngle = Math.atan(m_targetY / m_targetX) - initialAngle;
     double radius = Math.sqrt(Math.pow(m_targetX, 2) + Math.pow(m_targetY, 2));
     leftRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? -1 : 1);
     rightRadius = radius + Constants.wheelDistance / 2 * (changeInAngle > 0 ? 1 : -1);
@@ -70,6 +70,6 @@ public class SwerveTurnToPoint extends CommandBase { // Travels in a circle from
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drivetrain.getRobotAngle() - initialAngle - changeInAngle) < distanceWithinPosition; // <-- changeInAngle is not within the scope of the function isFinished()
+    return Math.abs(m_drivetrain.getRobotHeading() - initialAngle - changeInAngle) < distanceWithinPosition;
   }
 }
