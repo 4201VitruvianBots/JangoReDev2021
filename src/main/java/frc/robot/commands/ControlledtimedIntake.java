@@ -25,7 +25,7 @@ public class ControlledtimedIntake extends CommandBase {
   private double timestamp, intakeTimestamp, indexerTimestamp, fourBallTimestamp;
   private boolean intaking, haveFour, haveFourTripped;
   private Joystick m_controller;
- 
+
   private IntakeStates intakeState = IntakeStates.INTAKE_EMPTY;
   /**
    * Creates a new ControlledtimedIntake.
@@ -45,9 +45,9 @@ public class ControlledtimedIntake extends CommandBase {
   public void initialize() {
     m_intake.setIntakingState(true);
     timestamp = Timer.getFPGATimestamp();
-    if(count == 5)
+    if(m_indexer.getIntakeSensor() && m_indexer.getIndexerBottomSensor() && m_indexer.getIndexerTopSensor())
       intakeState = IntakeStates.INTAKE_FIVE_BALLS;
-    else if(count == 4)
+    else if(m_indexer.getIndexerBottomSensor() && m_indexer.getIndexerTopSensor())
       intakeState = IntakeStates.INTAKE_FOUR_BALLS;
     else
       intakeState = IntakeStates.INTAKE_ONE_BALL;
@@ -57,7 +57,7 @@ public class ControlledtimedIntake extends CommandBase {
           if(m_intake.getIntakePistonExtendStatus() != true)
               m_intake.setintakePiston(true);
   }
-  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -72,14 +72,14 @@ public class ControlledtimedIntake extends CommandBase {
       case INTAKE_FOUR_BALLS:
         m_intake.setIntakePercentOutput(0.8);
         m_indexer.setKickerOutput(0);
-        if (count == 5)
+        if (m_indexer.getIntakeSensor())
           intakeState = IntakeStates.INTAKE_FIVE_BALLS;
         break;
       case INTAKE_ONE_BALL:
       default:
         m_intake.setIntakePercentOutput(0.8);
         m_indexer.setKickerOutput(-0.4);
-        if (count = 1) {
+        if (m_indexer.getIndexerBottomSensor()) {
           m_indexer.setIndexerOutput(0.95);
         } else {
           m_indexer.setIndexerOutput(0);
